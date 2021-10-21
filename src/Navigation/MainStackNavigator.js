@@ -13,25 +13,25 @@ const MainStackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator name="chat" initialRouteName="SignInScreen">
         <Stack.Screen
-          name="Sign In Screen"
+          name="SignInScreen"
           component={SignInScreen}
           options={{headerShown: false, title: 'Sign In Screen'}}
         />
 
         <Stack.Screen
-          name="Add Group Screen"
+          name="AddGroupScreen"
           component={AddGroupScreen}
           options={{title: 'Add Group'}}
         />
 
         <Stack.Screen
-          name="Chat Screen"
+          name="ChatScreen"
           component={ChatScreen}
           options={{title: 'Chat'}}
         />
 
         <Stack.Screen
-          name="Groups Screen"
+          name="GroupsScreen"
           component={GroupsScreen}
           options={{title: 'Groups'}}
         />
