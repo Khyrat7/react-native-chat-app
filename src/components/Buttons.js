@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: {height: 10, width: 10},
     shadowRadius: 20,
-    marginBottom: Constants.screenHeight * 0.1,
+    paddingHorizontal: 20,
   },
   text: {
     fontSize: 16,

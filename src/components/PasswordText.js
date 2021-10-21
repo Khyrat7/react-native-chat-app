@@ -1,29 +1,26 @@
 import React from 'react';
-import {TextInput, Text, StyleSheet, View, Keyboard} from 'react-native';
+import {TextInput, Text, StyleSheet, View} from 'react-native';
 import Colors from '../../utils/Colors';
 import Constants from '../const/Constants';
 
-const EmailText = props => {
-  const {term, placeHolder, onTermChange, onValidationEmailAddress, error} =
+const PasswordText = props => {
+  const {term, placeHolder, onTermChange, onValidatePasswordField, error} =
     props;
-
   return (
-    <>
+    <View>
       <Text style={styles.errorText}>{error}</Text>
       <View style={styles.text}>
         <TextInput
-          autoCorrect={false}
           style={styles.textInput}
+          autoCorrect={false}
+          secureTextEntry={true}
           placeholder={placeHolder}
           value={term}
           onChangeText={onTermChange}
-          onEndEditing={onValidationEmailAddress}
-          keyboardAppearance="default"
-          keyboardType="email-address"
-          autoFocus={true}
+          onEndEditing={onValidatePasswordField}
         />
       </View>
-    </>
+    </View>
   );
 };
 
@@ -45,11 +42,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.smoke,
   },
   errorText: {
-    color: Colors.red,
     fontSize: 12,
+    color: Colors.red,
     marginBottom: -5,
     marginHorizontal: 20,
   },
 });
 
-export default EmailText;
+export default PasswordText;

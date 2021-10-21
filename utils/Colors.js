@@ -7,6 +7,7 @@ const Colors = {
   smoke: '#eeeeee',
   white: '#ffffff',
   uaStudiosGreen: '#219653',
+  red: 'red',
 };
 
 export default Colors;

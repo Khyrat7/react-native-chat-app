@@ -7,8 +7,8 @@ export default class Utility {
 
   // checking the validity of the email
   static isEmailValid = term => {
-    const expression = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const expression = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     let isValid = expression.test(String(term).toLowerCase());
-    return;
+    return isValid;
   };
 }
