@@ -8,7 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
-// import  from "react-native"
+
 import Buttons from '../components/Buttons';
 import Strings from '../const/String';
 import Colors from '../../utils/Colors';
@@ -18,8 +18,11 @@ import PasswordText from '../components/PasswordText';
 import Constants from '../const/Constants';
 import DismissKeyboard from '../../src/components/DismissKeyboard';
 import Utility from '../../utils/Utility';
+import auth from '@react-native-firebase/auth';
+// import firestore from '@react-native-firebase/firestore';
 
-const SignInScreen = () => {
+const SignInScreen = props => {
+  const {navigation} = props;
   // Hooks
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,6 +51,46 @@ const SignInScreen = () => {
   handlePress = () => {
     console.log('final mail : ' + email);
     console.log('final password : ' + password);
+    registration(email, password);
+  };
+
+  registration = (email, password) => {
+    try {
+      setIsLoading(true);
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(user => {
+          setIsLoading(false);
+          // Alert.alert('User Logged In');
+          // reseting the navigation routes to not include the logging page
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'GroupsScreen'}],
+          });
+        })
+        .catch(error => {
+          auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(user => {
+              setIsLoading(false);
+              // Alert.alert('New User Created : ' + user.user.email);
+              // reseting the navigation routes to not include the logging page
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'GroupsScreen'}],
+              });
+              console.log(user.user.email);
+            })
+            .catch(error => {
+              setIsLoading(false);
+              console.log('error');
+              Alert.alert(error.message);
+            });
+        });
+    } catch (error) {
+      setIsLoading(false);
+      Alert.alert(error.message);
+    }
   };
 
   return (
