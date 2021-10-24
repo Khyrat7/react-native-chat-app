@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     width: Constants.screenWidth * 0.85,
     borderRadius: 10,
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 40,
     borderColor: Colors.black,
     borderWidth: 1,
     justifyContent: 'center',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: Colors.red,
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: -5,
     marginHorizontal: 20,
   },

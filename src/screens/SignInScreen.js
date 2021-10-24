@@ -19,7 +19,7 @@ import Constants from '../const/Constants';
 import DismissKeyboard from '../../src/components/DismissKeyboard';
 import Utility from '../../utils/Utility';
 import auth from '@react-native-firebase/auth';
-// import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 
 const SignInScreen = props => {
   const {navigation} = props;
@@ -57,23 +57,39 @@ const SignInScreen = props => {
   registration = (email, password) => {
     try {
       setIsLoading(true);
+      // signing in and existing user
       auth()
         .signInWithEmailAndPassword(email, password)
         .then(user => {
           setIsLoading(false);
-          // Alert.alert('User Logged In');
+          console.log('User logged in successfully');
           // reseting the navigation routes to not include the logging page
+          console.log(user.user.uid);
           navigation.reset({
             index: 0,
             routes: [{name: 'GroupsScreen'}],
           });
         })
+        // in case of error that means that the user is new
+        // creating new user
         .catch(error => {
           auth()
             .createUserWithEmailAndPassword(email, password)
             .then(user => {
               setIsLoading(false);
-              // Alert.alert('New User Created : ' + user.user.email);
+              // Adding the new user to the firestore users collection with the same uid
+              firestore()
+                .collection('user')
+                .doc(user.user.uid)
+                .set({
+                  email: user.user.email,
+                })
+                .then(() => {
+                  console.log(
+                    'New user added to the Firestore db successfully !',
+                  );
+                });
+
               // reseting the navigation routes to not include the logging page
               navigation.reset({
                 index: 0,
@@ -98,6 +114,7 @@ const SignInScreen = props => {
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <SafeAreaView>
           <Image style={styles.logo} source={Images.logo} />
+          <Text style={styles.text}>Email:</Text>
           <EmailText
             error={emailError}
             placeHolder={Strings.EmailPlaceHolder}
@@ -108,6 +125,8 @@ const SignInScreen = props => {
             }}
             onValidationEmailAddress={validateEamil}
           />
+          <Text style={styles.text}>Password:</Text>
+
           <PasswordText
             error={passwordError}
             placeHolder={Strings.PasswordPlaceHolder}
@@ -143,6 +162,13 @@ const styles = StyleSheet.create({
     height: Constants.screenHeight * 0.3,
     width: Constants.screenWidth * 0.5,
     margin: 0.04 * Constants.screenHeight,
+  },
+  text: {
+    color: Colors.white,
+    fontSize: 24,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    textAlign: 'center',
   },
 });
 
