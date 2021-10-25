@@ -4,5 +4,6 @@ const Strings = {
   PasswordFieldEmpty: 'Password Field cannot be empty',
   EmailPlaceHolder: 'Email Address',
   PasswordPlaceHolder: 'Password',
+  EmptyTextField: 'You must enter a group name',
 };
 export default Strings;
