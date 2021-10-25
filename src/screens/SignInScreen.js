@@ -49,8 +49,8 @@ const SignInScreen = props => {
   };
 
   handlePress = () => {
-    console.log('final mail : ' + email);
-    console.log('final password : ' + password);
+    // console.log('final mail : ' + email);
+    // console.log('final password : ' + password);
     registration(email, password);
   };
 
@@ -62,9 +62,10 @@ const SignInScreen = props => {
         .signInWithEmailAndPassword(email, password)
         .then(user => {
           setIsLoading(false);
-          console.log('User logged in successfully');
+          console.log(
+            'User UID : ' + user.user.uid + ' Logged in Successfully.',
+          );
           // reseting the navigation routes to not include the logging page
-          console.log(user.user.uid);
           navigation.reset({
             index: 0,
             routes: [{name: 'GroupsScreen'}],
@@ -78,24 +79,21 @@ const SignInScreen = props => {
             .then(user => {
               setIsLoading(false);
               // Adding the new user to the firestore users collection with the same uid
-              firestore()
-                .collection('user')
-                .doc(user.user.uid)
-                .set({
-                  email: user.user.email,
-                })
-                .then(() => {
-                  console.log(
-                    'New user added to the Firestore db successfully !',
-                  );
-                });
+              firestore().collection('users').doc(user.user.uid).set({
+                email: user.user.email,
+              });
 
               // reseting the navigation routes to not include the logging page
               navigation.reset({
                 index: 0,
                 routes: [{name: 'GroupsScreen'}],
               });
-              console.log(user.user.email);
+              console.log(
+                'New User ' +
+                  user.user.email +
+                  ' Created Successfully \n User UID : ' +
+                  user.user.uid,
+              );
             })
             .catch(error => {
               setIsLoading(false);
@@ -121,7 +119,7 @@ const SignInScreen = props => {
             term={email}
             onTermChange={text => {
               setEmail(text);
-              console.log('New Email : ' + email);
+              // console.log('New Email : ' + email);
             }}
             onValidationEmailAddress={validateEamil}
           />
@@ -133,7 +131,7 @@ const SignInScreen = props => {
             term={password}
             onTermChange={text => {
               setPassword(text);
-              console.log('Entered Password : ' + password);
+              // console.log('Entered Password : ' + password);
             }}
             onValidatePasswordField={validatePassword}
           />
