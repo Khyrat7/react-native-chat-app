@@ -19,6 +19,8 @@ import DismissKeyboard from '../components/DismissKeyboard';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import MessageItem from '../components/MessageItem';
+import LottieView from 'lottie-react-native';
+import {set} from 'react-native-reanimated';
 
 const ChatScreen = props => {
   const {navigation, route} = props;
@@ -69,6 +71,7 @@ const ChatScreen = props => {
         text: 'Yes',
         onPress: () => {
           joinGroup();
+          setIsJoined(true);
         },
       },
       {
@@ -164,66 +167,85 @@ const ChatScreen = props => {
     sendMessageToChat();
   };
 
-  return (
-    <DismissKeyboard>
-      <KeyboardAvoidingView
-        style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
-        behavior="padding"
-        enabled
-        keyboardVerticalOffset={100}>
-        <View style={styles.container}>
-          <FlatList
-            // making the content of the flat list focus on tht bottom of the list by default
-            inverted
-            contentContainerStyle={{flexDirection: 'column-reverse'}}
-            //_______________________________________________________________________________
-            style={styles.flatList}
-            data={messageList}
-            keyExtractor={(item, index) => 'key' + index}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity onPress={() => {}}>
-                  <MessageItem item={item} />
-                </TouchableOpacity>
-              );
-            }}
-          />
+  const chatView = () => {
+    return (
+      <DismissKeyboard>
+        <KeyboardAvoidingView
+          style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
+          behavior="padding"
+          enabled
+          keyboardVerticalOffset={100}>
+          <View style={styles.container}>
+            <FlatList
+              // making the content of the flat list focus on tht bottom of the list by default
+              inverted
+              contentContainerStyle={{flexDirection: 'column-reverse'}}
+              //_______________________________________________________________________________
+              style={styles.flatList}
+              data={messageList}
+              keyExtractor={(item, index) => 'key' + index}
+              renderItem={({item}) => {
+                return (
+                  <TouchableOpacity onPress={() => {}}>
+                    <MessageItem item={item} />
+                  </TouchableOpacity>
+                );
+              }}
+            />
 
-          {error ? (
-            <Text style={{color: Colors.red, backgroundColor: Colors.black}}>
-              {error}
-            </Text>
-          ) : null}
-          <View style={styles.mfFieldView}>
-            <TextInput
-              style={styles.mfTextField}
-              autoCorrect={false}
-              placeholder={Strings.EmptyMessagePlaceHolder}
-              value={message}
-              onChangeText={text => {
-                setMessage(text);
-                isValidText();
-              }}
-              onEndEditing={() => {
-                isValidText();
-              }}
-            />
-            <Button
-              style={styles.mfButton}
-              title={Strings.Send}
-              color={Colors.white}
-              onPress={() => {
-                onSubmit();
-              }}
-            />
+            {error ? (
+              <Text style={{color: Colors.red, backgroundColor: Colors.black}}>
+                {error}
+              </Text>
+            ) : null}
+            <View style={styles.mfFieldView}>
+              <TextInput
+                style={styles.mfTextField}
+                autoCorrect={false}
+                placeholder={Strings.EmptyMessagePlaceHolder}
+                value={message}
+                onChangeText={text => {
+                  setMessage(text);
+                  isValidText();
+                }}
+                onEndEditing={() => {
+                  isValidText();
+                }}
+              />
+              <Button
+                style={styles.mfButton}
+                title={Strings.Send}
+                color={Colors.white}
+                onPress={() => {
+                  onSubmit();
+                }}
+              />
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
-    </DismissKeyboard>
-  );
+        </KeyboardAvoidingView>
+      </DismissKeyboard>
+    );
+  };
+
+  const joinView = () => {
+    return (
+      <View style={styles.lottiView}>
+        <LottieView
+          source={require('../../assets/joinChat.json')}
+          autoPlay
+          loop
+        />
+      </View>
+    );
+  };
+  return isJoined ? chatView() : joinView();
 };
 
 const styles = StyleSheet.create({
+  lottiView: {
+    width: '100%',
+    height: 0.6 * Constants.screenHeight,
+  },
   container: {
     flexDirection: 'column',
     justifyContent: 'center',

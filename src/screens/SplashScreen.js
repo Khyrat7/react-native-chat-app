@@ -3,6 +3,8 @@ import {Image, StyleSheet, View} from 'react-native';
 import Images from '../const/Images';
 import Colors from '../../utils/Colors';
 import auth from '@react-native-firebase/auth';
+import LottieView from 'lottie-react-native';
+import Constatnts from '../const/Constants';
 
 const SplashScreen = props => {
   const {navigation} = props;
@@ -31,17 +33,27 @@ const SplashScreen = props => {
       } catch (e) {
         console.log(e);
       }
-    }, 2000);
+    }, 5000);
   }
 
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={Images.logo} />
+      <View style={styles.lottiView}>
+        <LottieView
+          source={require('../../assets/working.json')}
+          autoPlay
+          loop></LottieView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  lottiView: {
+    width: '100%',
+    height: 0.6 * Constatnts.screenHeight,
+  },
   container: {
     backgroundColor: Colors.black,
     alignSelf: 'center',
