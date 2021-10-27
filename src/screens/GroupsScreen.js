@@ -20,27 +20,28 @@ const GroupsScreen = props => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const groupsArray = [];
-    async function fetchGroupsData() {
-      try {
-        await firestore()
-          .collection('groups')
-          .onSnapshot(snapshot => {
-            snapshot.docChanges().forEach(change => {
-              if (change.type === 'added') {
-                groupsArray.push(change.doc.data());
-              } else if (change.type === 'modified') {
-                groupsArray.push(change.doc.data());
-              }
-              setGroups(groupsArray);
-            });
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
     fetchGroupsData();
   }, []);
+
+  function fetchGroupsData() {
+    const groupsArray = [];
+    try {
+      firestore()
+        .collection('groups')
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              groupsArray.push(change.doc.data());
+            } else if (change.type === 'modified') {
+              groupsArray.push(change.doc.data());
+            }
+            setGroups(groupsArray);
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useLayoutEffect(() => {
     // setting the navigation bar
@@ -57,18 +58,21 @@ const GroupsScreen = props => {
       headerLeft: () => (
         <ButtonWithBackGround
           onPress={() => {
-            auth()
-              .signOut()
-              .then(() => {
-                console.log('User signed out!');
-                navigation.navigate('SignInScreen');
-              });
+            signoutUser();
           }}
           image={Images.logout}
         />
       ),
     });
   });
+
+  signoutUser = async () => {
+    try {
+      await auth().signOut();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <View style={styles.container}>

@@ -5,13 +5,20 @@ import SignInScreen from '../screens/SignInScreen';
 import AddGroupScreen from '../screens/AddGroupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import GroupsScreen from '../screens/GroupsScreen';
+import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
 const MainStackNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator name="chat" initialRouteName="SignInScreen">
+      <Stack.Navigator name="chat" initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{headerShown: false, title: 'Splash Screen'}}
+        />
+
         <Stack.Screen
           name="SignInScreen"
           component={SignInScreen}
