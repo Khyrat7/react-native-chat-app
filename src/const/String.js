@@ -5,5 +5,8 @@ const Strings = {
   EmailPlaceHolder: 'Email Address',
   PasswordPlaceHolder: 'Password',
   EmptyTextField: 'You must enter a group name',
+  EmptyMessagePlaceHolder: 'Write you message here.',
+  Send: 'Send',
+  EmptyMessage: 'You must type something to send',
 };
 export default Strings;
