@@ -6,6 +6,7 @@ import Buttons from '../components/Buttons';
 import Utility from '../../utils/Utility';
 import Strings from '../const/String';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const AddGroupScreen = props => {
   const {navigation} = props;
@@ -16,13 +17,40 @@ const AddGroupScreen = props => {
     const isValidText = Utility.isValidField(groupName);
     if (isValidText) {
       setError('');
-      firestore().collection('groups').add({
-        groupName: {groupName},
-      });
+      const groupRef = firestore().collection('groups').doc();
+      const userID = auth().currentUser.uid;
+      groupRef
+        .set({
+          groupID: groupRef.id,
+          groupName: groupName,
+          userID: userID,
+        })
+        .then(() => {
+          console.log('Group :' + groupName + ' , created successfully');
+          addMembersToChatGroup(groupRef.id, userID);
+        })
+        .catch(function (error) {
+          Alert.alert(error);
+        });
       navigation.navigate('GroupsScreen');
     } else {
       setError(Strings.EmptyTextField);
     }
+  };
+
+  addMembersToChatGroup = (groupID, userID) => {
+    const membersRef = firestore()
+      .collection('group members')
+      .doc(groupID)
+      .collection('member')
+      .doc(userID);
+    membersRef
+      .set({
+        userID: userID,
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
@@ -50,10 +78,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ebebeb',
+    backgroundColor: Colors.black,
   },
   header: {
-    color: '#101010',
+    color: Colors.white,
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -66,6 +94,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     backgroundColor: Colors.smoke,
+    borderRadius: 10,
   },
   errorText: {
     fontSize: 12,
